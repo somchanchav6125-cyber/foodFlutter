@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "625287791423",
+    "project_id": "myhome-fianl",
+    "storage_bucket": "myhome-fianl.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625287791423:android:cb654e60f534ea3f6d498a",
+        "android_client_info": {
+          "package_name": "com.example.myhomework"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmvfdkIZBxfl4Ga2RCZh-qgx41S8p1CBo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
