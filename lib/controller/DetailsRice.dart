@@ -27,7 +27,6 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   int _quantity = 1;
   String? _selectedSize;
-  String? _selectedColor;
 
   final List<String> _sizes = ['S', 'M', 'L', 'XL'];
 
@@ -35,7 +34,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     _selectedSize = 'M';
-    _selectedColor = 'ខ្មៅ';
   }
 
   double get _basePrice {
@@ -90,95 +88,203 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: gatXPink,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+            color: Colors.black87,
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
         title: Text(
           'ព័ត៌មានលម្អិត',
           style: GoogleFonts.notoSansKhmer(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black87,
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        elevation: 0,
         centerTitle: true,
+        actions: [
+          Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.favorite_border_rounded, size: 20),
+              color: Colors.black87,
+              onPressed: () {},
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image Section
-            Stack(
-              children: [
-                Container(
-                  height: 300,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.grey.shade100, Colors.grey.shade200],
-                    ),
+            // Product Image with Modern Design
+            Container(
+              height: 320,
+              margin: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
-                  child: imageUrl.isNotEmpty
-                      ? Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value:
-                                    loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                    : null,
-                                color: gatXPink,
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Stack(
+                  children: [
+                    // Background Gradient
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.grey.shade50, Colors.grey.shade100],
+                        ),
+                      ),
+                    ),
+
+                    // Product Image
+                    if (imageUrl.isNotEmpty)
+                      Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                  : null,
+                              color: gatXPink,
+                              strokeWidth: 2,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.fastfood_rounded,
+                                  size: 80,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'មិនមានរូបភាព',
+                                  style: GoogleFonts.notoSansKhmer(
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                    else
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.fastfood_rounded,
+                              size: 80,
+                              color: Colors.grey.shade400,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'មិនមានរូបភាព',
+                              style: GoogleFonts.notoSansKhmer(
+                                color: Colors.grey.shade500,
                               ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey.shade300,
-                              child: const Icon(
-                                Icons.fastfood,
-                                size: 80,
-                                color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    // Gradient Overlay
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.05),
+                            Colors.black.withOpacity(0.1),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // Discount Badge (if available)
+                    if (widget.product['discount'] != null)
+                      Positioned(
+                        top: 16,
+                        left: 16,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [gatXOrange, Colors.orange],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.orange.withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
                               ),
-                            );
-                          },
-                        )
-                      : const Center(
-                          child: Icon(
-                            Icons.fastfood,
-                            size: 80,
-                            color: Colors.grey,
+                            ],
+                          ),
+                          child: Text(
+                            '${widget.product['discount']}% OFF',
+                            style: GoogleFonts.notoSansKhmer(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
+                      ),
+                  ],
                 ),
-                Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.1),
-                        Colors.black.withOpacity(0.3),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
 
             // Product Details Section
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -193,26 +299,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             Text(
                               productName,
                               style: GoogleFonts.notoSansKhmer(
-                                fontSize: 24,
+                                fontSize: 26,
                                 fontWeight: FontWeight.bold,
                                 height: 1.2,
+                                color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 12),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
+                                horizontal: 16,
+                                vertical: 8,
                               ),
                               decoration: BoxDecoration(
-                                color: gatXPink.withOpacity(0.1),
+                                gradient: LinearGradient(
+                                  colors: [gatXPink, gatXDarkPink],
+                                ),
                                 borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: gatXPink.withOpacity(0.3),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
                               child: Text(
                                 widget.category,
                                 style: GoogleFonts.notoSansKhmer(
                                   fontSize: 14,
-                                  color: gatXPink,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -223,206 +339,347 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ],
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
 
-                  // Base Price
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "តម្លៃគោល",
-                        style: GoogleFonts.notoSansKhmer(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
-                        ),
+                  // Price Section
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.grey.shade50, Colors.white],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        productPriceDisplay,
-                        style: GoogleFonts.notoSansKhmer(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: gatXPink,
-                        ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.grey.shade200,
+                        width: 1.5,
                       ),
-                    ],
+                    ),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "តម្លៃគោល",
+                              style: GoogleFonts.notoSansKhmer(
+                                fontSize: 14,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              productPriceDisplay,
+                              style: GoogleFonts.notoSansKhmer(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: gatXPink,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: gatXGreen.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: gatXGreen.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.star_rounded,
+                                color: gatXGreen,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '4.8',
+                                style: GoogleFonts.notoSansKhmer(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: gatXGreen,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
 
                   // Size Selection
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "ជ្រើសរើសទំហំ",
-                        style: GoogleFonts.notoSansKhmer(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.straighten_rounded,
+                            color: gatXPink,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            "ជ្រើសរើសទំហំ",
+                            style: GoogleFonts.notoSansKhmer(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       Wrap(
                         spacing: 12,
                         runSpacing: 12,
                         children: _sizes.map((size) {
-                          return ChoiceChip(
-                            label: Text(size),
-                            selected: _selectedSize == size,
-                            onSelected: (selected) {
+                          final isSelected = _selectedSize == size;
+                          return GestureDetector(
+                            onTap: () {
                               setState(() {
-                                _selectedSize = selected ? size : null;
+                                _selectedSize = size;
                               });
                             },
-                            selectedColor: gatXPink,
-                            backgroundColor: Colors.grey.shade100,
-                            labelStyle: GoogleFonts.notoSansKhmer(
-                              color: _selectedSize == size
-                                  ? Colors.white
-                                  : Colors.black87,
-                              fontWeight: FontWeight.w600,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                gradient: isSelected
+                                    ? LinearGradient(
+                                        colors: [gatXPink, gatXDarkPink],
+                                      )
+                                    : null,
+                                color: isSelected ? null : Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Colors.transparent
+                                      : Colors.grey.shade300,
+                                  width: 1.5,
+                                ),
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: gatXPink.withOpacity(0.4),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ]
+                                    : [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                              ),
+                              child: Text(
+                                size,
+                                style: GoogleFonts.notoSansKhmer(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Colors.black87,
+                                ),
+                              ),
                             ),
                           );
                         }).toList(),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
 
-                  Row(
-                    children: [
-                      Text(
-                        "ចំនួន",
-                        style: GoogleFonts.notoSansKhmer(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(25),
-                          border: Border.all(color: Colors.grey.shade300),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove, size: 20),
-                              onPressed: () {
-                                setState(() {
-                                  if (_quantity > 1) _quantity--;
-                                });
-                              },
-                            ),
-                            Container(
-                              width: 40,
-                              alignment: Alignment.center,
-                              child: Text(
-                                '$_quantity',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.add, size: 20),
-                              onPressed: () {
-                                setState(() {
-                                  _quantity++;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 28),
 
-                  const SizedBox(height: 20),
-
-                  // Total Price
+                  // Quantity and Total Price Section
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: gatXPink.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: [Colors.grey.shade50, Colors.white],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: gatXPink.withOpacity(0.2),
+                        color: Colors.grey.shade200,
                         width: 1.5,
                       ),
                     ),
-                    child: Row(
+                    child: Column(
                       children: [
-                        Text(
-                          "តម្លៃសរុប:",
-                          style: GoogleFonts.notoSansKhmer(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.format_list_numbered_rounded,
+                                  color: gatXPink,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "ចំនួន",
+                                  style: GoogleFonts.notoSansKhmer(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(25),
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.remove_rounded,
+                                      size: 20,
+                                      color: _quantity > 1
+                                          ? Colors.black87
+                                          : Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (_quantity > 1) _quantity--;
+                                      });
+                                    },
+                                  ),
+                                  Container(
+                                    width: 40,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '$_quantity',
+                                      style: GoogleFonts.notoSansKhmer(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.add_rounded,
+                                      size: 20,
+                                      color: Colors.black87,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _quantity++;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        const Spacer(),
-                        Text(
-                          "\$${_totalPrice.toStringAsFixed(2)}",
-                          style: GoogleFonts.notoSansKhmer(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: gatXPink,
-                          ),
+                        const SizedBox(height: 16),
+                        Divider(color: Colors.grey.shade300, height: 1),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Text(
+                              "តម្លៃសរុប:",
+                              style: GoogleFonts.notoSansKhmer(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              "\$${_totalPrice.toStringAsFixed(2)}",
+                              style: GoogleFonts.notoSansKhmer(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: gatXPink,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
 
                   // Description
                   if (productDescription.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "ពណ៌នា",
-                          style: GoogleFonts.notoSansKhmer(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.description_rounded,
+                              color: gatXPink,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "ពណ៌នា",
+                              style: GoogleFonts.notoSansKhmer(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: Colors.grey[50],
-                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Colors.grey.shade200),
                           ),
                           child: Text(
                             productDescription,
                             style: GoogleFonts.notoSansKhmer(
                               fontSize: 14,
-                              height: 1.5,
-                              color: Colors.grey[700],
+                              height: 1.6,
+                              color: Colors.grey.shade700,
                             ),
                           ),
                         ),
                       ],
                     ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
 
                   // Add to Cart Button
                   SizedBox(
                     width: double.infinity,
-                    height: 58,
+                    height: 60,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: gatXPink,
@@ -430,7 +687,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        elevation: 4,
+                        elevation: 8,
                         shadowColor: gatXPink.withOpacity(0.5),
                       ),
                       onPressed: () {
@@ -439,8 +696,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.shopping_cart, size: 24),
-                          const SizedBox(width: 10),
+                          Icon(Icons.shopping_cart_rounded, size: 24),
+                          const SizedBox(width: 12),
                           Text(
                             "បន្ថែមទៅរទេះ ($_quantity)",
                             style: GoogleFonts.notoSansKhmer(
@@ -452,6 +709,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -467,25 +726,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final Map<String, dynamic> productWithOptions = {
       ...widget.product,
       'selectedSize': _selectedSize,
-      'selectedColor': _selectedColor,
       'quantity': _quantity,
       'totalPrice': _totalPrice,
       'category': widget.category,
       'basePrice': _basePrice,
     };
 
-    print('🛒 Adding to cart: $productWithOptions');
-
     widget.onAddToCart(productWithOptions);
 
+    // Show success animation
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          '✅ បានបន្ថែម $productName ($_quantity) ទៅក្នុងរទេះ!',
-          style: GoogleFonts.notoSansKhmer(),
+        content: Row(
+          children: [
+            Icon(Icons.check_circle_rounded, color: Colors.white),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                '✅ បានបន្ថែម $productName ($_quantity) ទៅក្នុងរទេះ!',
+                style: GoogleFonts.notoSansKhmer(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
         ),
         duration: const Duration(seconds: 2),
-        backgroundColor: gatXPink,
+        backgroundColor: gatXGreen,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
 

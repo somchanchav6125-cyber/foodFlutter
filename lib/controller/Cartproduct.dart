@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myhomework/controller/DetailsRice.dart';
 import 'package:myhomework/controller/payproduct.dart';
+import 'package:myhomework/model/CartIem.dart';
 import 'package:myhomework/view/fromHomepage/homepage_page1.dart';
 
 const Color gatXPink = Color(0xFFD70C6D);
